@@ -41,7 +41,6 @@ DEFAULT_VALUES = {
     "COMPRESS_SPECTRALS": False,
     "LMA_COMMENT_IN_T_DESC": False,
     "USE_UPC_AS_CATNO":True,
-    "DEFAULT_TRACKER":False
 }
 
 
