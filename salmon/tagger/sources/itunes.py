@@ -1,8 +1,7 @@
+import json
 import re
 from collections import defaultdict
 from datetime import datetime
-
-import json
 
 from salmon.common import RE_FEAT, parse_copyright
 from salmon.errors import ScrapeError
@@ -13,7 +12,7 @@ ALIAS_GENRE = {
     "Hip-Hop/Rap": {"Hip Hop", "Rap"},
     "R&B/Soul": {"Rhythm & Blues", "Soul"},
     "Music": {},
-    #Aliasing Music to an empty set because we don't want a genre 'music'
+    # Aliasing Music to an empty set because we don't want a genre 'music'
 }
 
 

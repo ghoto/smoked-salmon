@@ -10,19 +10,15 @@ from dottorrent import Torrent
 from salmon import config
 from salmon.common import str_to_int_if_int
 from salmon.constants import ARTIST_IMPORTANCES, RELEASE_TYPES
-from salmon.images import upload_cover
-
 from salmon.errors import RequestError
-
-from salmon.uploader.spectrals import (
-    generate_lossy_approval_comment,
-    report_lossy_master,
-    make_spectral_bbcode,
-)
-
-
+from salmon.images import upload_cover
 from salmon.sources import SOURCE_ICONS
 from salmon.tagger.sources import METASOURCES
+from salmon.uploader.spectrals import (
+    generate_lossy_approval_comment,
+    make_spectral_bbcode,
+    report_lossy_master,
+)
 
 loop = asyncio.get_event_loop()
 
@@ -147,7 +143,7 @@ def compile_data_existing_group(
     request_id,
 ):
     """Compile the data that needs to be submitted
-     with an upload to an existing group."""
+    with an upload to an existing group."""
     # print(generate_t_description(metadata, track_data, hybrid, metadata["urls"], spectral_urls, lossy_comment))
     return {
         "submit": True,

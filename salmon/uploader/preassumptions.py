@@ -4,9 +4,7 @@ from html import unescape
 import click
 
 from salmon import config
-from salmon.errors import UploadError
-
-from salmon.errors import RequestError
+from salmon.errors import RequestError, UploadError
 
 loop = asyncio.get_event_loop()
 
@@ -38,7 +36,8 @@ def print_preassumptions(
             )
     if spectrals_after:
         click.secho(
-            f'Assessing spectrals after upload.', fg="yellow",
+            f'Assessing spectrals after upload.',
+            fg="yellow",
         )
 
     if lossy and not spectrals:

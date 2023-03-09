@@ -2,9 +2,15 @@ import asyncio
 import re
 from itertools import chain
 
-from salmon.search.base import ArtistRlsData, LabelRlsData, IdentData, SearchMixin
-from salmon.sources import DeezerBase
 from ratelimit import limits, sleep_and_retry
+
+from salmon.search.base import (
+    ArtistRlsData,
+    IdentData,
+    LabelRlsData,
+    SearchMixin,
+)
+from salmon.sources import DeezerBase
 
 
 class Searcher(DeezerBase, SearchMixin):

@@ -4,9 +4,9 @@ from salmon import config
 from salmon.errors import ImageUploadFailed
 from salmon.images.base import BaseImageUploader
 
-
-#mimetypes.init()
+# mimetypes.init()
 HEADERS = {"referer": "https://ptpimg.me/index.php", "User-Agent": config.USER_AGENT}
+
 
 class ImageUploader(BaseImageUploader):
     def _perform(self, file_, ext):
@@ -23,4 +23,6 @@ class ImageUploader(BaseImageUploader):
                     f"Failed decoding body:\n{e}\n{resp.content}"
                 ) from e
         else:
-            raise ImageUploadFailed(f"Failed. Status {resp.status_code}:\n{resp.content}")
+            raise ImageUploadFailed(
+                f"Failed. Status {resp.status_code}:\n{resp.content}"
+            )

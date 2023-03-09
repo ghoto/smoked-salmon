@@ -62,4 +62,3 @@ def get_tidal_regions_to_fetch():
         except ImportError:
             pass
     raise ScrapeError(f"No regions defined for Tidal to grab from")
-

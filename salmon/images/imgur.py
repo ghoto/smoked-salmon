@@ -5,6 +5,7 @@ from salmon.errors import ImageUploadFailed
 
 CLIENT = pyimgur.Imgur(config.IMGUR_CLIENT_ID)
 
+
 class ImageUploader:
     def upload_file(self, filename):
         try:

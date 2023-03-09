@@ -6,6 +6,7 @@ from random import choice
 
 import requests
 from bs4 import BeautifulSoup
+
 from salmon.constants import UAGENTS
 from salmon.errors import ImageUploadFailed
 
@@ -25,4 +26,3 @@ class BaseImageUploader:
             return self._perform((filename, open_file, mime_type), ext)
             # Do we need to strip filenames?
             # return self._perform((f"filename{ext}", open_file, mime_type), ext)
-

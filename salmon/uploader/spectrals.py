@@ -1,12 +1,15 @@
 import asyncio
 import os
 import platform
+# used by post upload stuff might move.
+import re
 import shutil
 import subprocess
 import time
 from os.path import dirname, join
 
 import click
+from bs4 import BeautifulSoup
 
 from salmon import config
 from salmon.common import flush_stdin, get_audio_files, prompt_async
@@ -18,11 +21,6 @@ from salmon.errors import (
 )
 from salmon.images import upload_spectrals as upload_spectral_imgs
 from salmon.web import create_app_async, spectrals
-
-# used by post upload stuff might move.
-import re
-from bs4 import BeautifulSoup
-
 
 loop = asyncio.get_event_loop()
 THREADS = [None] * config.SIMULTANEOUS_SPECTRALS
@@ -398,7 +396,6 @@ def prompt_lossy_master():
             raise AbortAndDeleteFolder
 
 
-
 def report_lossy_master(
     gazelle_site,
     torrent_id,
@@ -449,7 +446,7 @@ def _add_spectral_links_to_lossy_comment(comment, source_url, spectral_urls, fil
         comment += "\n\n"
     if source_url:
         comment += f"Sourced from: {source_url}\n\n"
-    comment+=make_spectral_bbcode(filenames,spectral_urls)
+    comment += make_spectral_bbcode(filenames, spectral_urls)
     return comment
 
 
