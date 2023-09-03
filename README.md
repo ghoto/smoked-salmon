@@ -6,7 +6,32 @@ All information pertaining to its use can be found in the wiki.
 
 Wiki: https://codeberg.org/xmoforf/smoked-salmon/wiki/home
 
-### Plugin Installation
+## Credits
+
+This is a fork of the wonderful tool provided by **ligh7s** at 
+https://github.com/ligh7s/smoked-salmon. Massive credit and thanks to them
+for sharing this tool.
+
+The git log also indicates the following contributors:
+
+```
+$ git shortlog -s -n
+   100  elwood
+     9  elwoodpd
+     7  bootldrDNB
+     7  xmoforf
+     6  flying-sausages
+     4  lights
+     3  b o o t l d r
+     2  AltQ
+     2  Flying Sausages
+     1  Henry Romp
+     1  Junkbite
+     1  bootldr
+     1  flying sausages
+```
+
+### Plugin Installationq
 
 Clone plugins into the plugins/ folder. Salmon will automatically detect
 and import them. Their CLI commands should appear when salmon is next ran.
