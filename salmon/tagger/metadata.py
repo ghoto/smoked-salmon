@@ -114,7 +114,7 @@ def _select_choice(choices, rls_data):
         if not tasks:
             continue
 
-        metadatas = loop.run_until_complete(asyncio.gather(*tasks, loop=loop))
+        metadatas = loop.run_until_complete(asyncio.gather(*tasks))
         meta = combine_metadatas(
             *((s, m) for s, m in zip(sources, metadatas) if m), base=rls_data
         )

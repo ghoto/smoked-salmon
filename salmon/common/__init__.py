@@ -42,7 +42,7 @@ class Prompt:
     # https://stackoverflow.com/a/35514777
 
     def __init__(self):
-        self.q = asyncio.Queue(loop=loop)
+        self.q = asyncio.Queue()
         self.reader_added = False
 
     def got_input(self):

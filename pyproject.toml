@@ -6,8 +6,8 @@ authors = ["nobody <nobody@exeample.com>"]
 license = "Apache-2.0"
 
 [tool.poetry.dependencies]
-python = "^3.6"
-requests = "^2.22.0"
+python = "^3.9||^3.10"
+requests = "^2.31.0"
 click = "^7.0"
 bs4 = "^0.0.1"
 colorama = "^0.4.3"
@@ -15,8 +15,8 @@ dottorrent = "^1.10.1"
 musicbrainzngs = "^0.7.1"
 mutagen = "^1.44.0"
 pyperclip = "^1.7.0"
-pycryptodome = "^3.9.6"
-aiohttp = "^3.6.2"
+pycryptodome = "^3.9.7"
+aiohttp = "^3.8.3"
 aiohttp-jinja2 = "^1.2.0"
 jinja2 = "^2.11.1"
 pyimgur = "^0.6.0"
@@ -33,7 +33,7 @@ flake8 = "^3.7.9"
 
 [tool.black]
 line-length = 88
-target-version = ['py36']
+target-version = ['py39', 'py310']
 skip-string-normalization = true
 
 [build-system]
