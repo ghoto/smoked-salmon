@@ -4,7 +4,7 @@ A tool to assist with finding music and uploading it to RED.
 
 All information pertaining to its use can be found in the wiki.
 
-Wiki: https://github.com/ligh7s/smoked-salmon/wiki
+Wiki: https://codeberg.org/xmoforf/smoked-salmon/wiki/home
 
 ### Plugin Installation
 

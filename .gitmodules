@@ -1,0 +1,3 @@
+[submodule "smoked-salmon.wiki"]
+	path = wiki
+	url = git@codeberg.org:xmoforf/smoked-salmon.wiki.git
