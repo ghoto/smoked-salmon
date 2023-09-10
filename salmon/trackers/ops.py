@@ -12,11 +12,6 @@ from bs4 import BeautifulSoup
 
 class OpsApi(BaseGazelleApi):
     def __init__(self):
-        self.headers = {
-            "Connection": "keep-alive",
-            "Cache-Control": "max-age=0",
-            "User-Agent": config.USER_AGENT,
-        }
         self.site_code = 'OPS'
         self.base_url = 'https://orpheus.network'
         self.tracker_url = 'https://home.opsfet.ch'
@@ -27,13 +22,7 @@ class OpsApi(BaseGazelleApi):
             self.dot_torrents_dir = config.DOTTORRENTS_DIR
 
         self.cookie = config.OPS_SESSION
-
-        self.session = requests.Session()
-        self.session.headers.update(self.headers)
-
-        self.authkey = None
-        self.passkey = None
-        self.authenticate()
+        super().__init__()
 
     def parse_most_recent_torrent_and_group_id_from_group_page(self, text):
         """

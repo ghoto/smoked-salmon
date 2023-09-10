@@ -59,15 +59,7 @@ class BaseGazelleApi:
             "Cache-Control": "max-age=0",
             "User-Agent": config.USER_AGENT,
         }
-        self.site_code = 'RED'
-        self.base_url = 'https://redacted.ch'
-        self.tracker_url = 'https://flacsfor.me'
-        self.site_string = 'RED'
         self.dot_torrents_dir = config.DOTTORRENTS_DIR
-        self.cookie = config.RED_SESSION
-        if 'SITE_API_KEY' in tracker_details.keys():
-            self.api_key = config.RED_API_KEY
-
         self.session = requests.Session()
         self.session.headers.update(self.headers)
 
