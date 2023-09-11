@@ -114,6 +114,17 @@ loop = asyncio.get_event_loop()
     is_flag=True,
     help=f'Assess / upload / report spectrals after torrent upload',
 )
+@click.option(
+    "--auto-rename",
+    "-n",
+    is_flag=True,
+    help=f'Rename files and folders automatically',
+)
+@click.option(
+    "--skip-up",
+    is_flag=True,
+    help=f'Skip check for 24 bit upconversion',
+)
 def up(
     path,
     group_id,
@@ -126,6 +137,8 @@ def up(
     tracker,
     request,
     spectrals_after,
+    auto_rename,
+    skip_up,
 ):
     """Command to upload an album folder to a Gazelle Site."""
     gazelle_site = salmon.trackers.get_class(tracker)()
@@ -154,6 +167,8 @@ def up(
         recompress=compress,
         request_id=request,
         spectrals_after=spectrals_after,
+        auto_rename=auto_rename,
+        skip_up=skip_up,
     )
 
 
@@ -172,6 +187,8 @@ def upload(
     searchstrs=None,
     request_id=None,
     spectrals_after=False,
+    auto_rename=False,
+    skip_up=False,
 ):
     """Upload an album folder to Gazelle Site
     Offer the choice to upload to another tracker after completion."""
@@ -193,7 +210,7 @@ def upload(
     )
 
     try:
-        if rls_data["encoding"] == "24bit Lossless" and click.confirm(
+        if rls_data["encoding"] == "24bit Lossless" and not skip_up and click.confirm(
             click.style(
                 "24bit detected. Do you want to check whether might be upconverted?",
                 fg="magenta",
@@ -218,7 +235,7 @@ def upload(
         metadata = get_metadata(path, tags, rls_data)
         download_cover_if_nonexistent(path, metadata["cover"])
         path, metadata, tags, audio_info = edit_metadata(
-            path, tags, metadata, source, rls_data, recompress
+            path, tags, metadata, source, rls_data, recompress, auto_rename
         )
         if not group_id:
             group_id = recheck_dupe(gazelle_site, searchstrs, metadata)
@@ -320,7 +337,7 @@ def upload(
             return click.secho(f"\nDone uploading this release.", fg="green")
 
 
-def edit_metadata(path, tags, metadata, source, rls_data, recompress):
+def edit_metadata(path, tags, metadata, source, rls_data, recompress, auto_rename):
     """
     The metadata editing portion of the uploading process. This sticks the user
     into an infinite loop where the metadata process is repeated until the user
@@ -328,13 +345,13 @@ def edit_metadata(path, tags, metadata, source, rls_data, recompress):
     """
     while True:
         metadata = review_metadata(metadata, metadata_validator)
-        tag_files(path, tags, metadata)
+        tag_files(path, tags, metadata, auto_rename)
 
         tags = check_tags(path)
         if recompress:
             recompress_path(path)
-        path = rename_folder(path, metadata)
-        rename_files(path, tags, metadata, source)
+        path = rename_folder(path, metadata, auto_rename)
+        rename_files(path, tags, metadata, auto_rename, source)
         check_folder_structure(path)
 
         if click.confirm(

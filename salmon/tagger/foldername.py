@@ -15,7 +15,7 @@ from salmon.constants import (
 from salmon.errors import UploadError
 
 
-def rename_folder(path, metadata, check=True):
+def rename_folder(path, metadata, auto_rename, check=True):
     """
     Create a revised folder name from the new metadata and present it to the
     user. Have them decide whether or not to accept the folder name.
@@ -29,17 +29,18 @@ def rename_folder(path, metadata, check=True):
         click.secho("\nRenaming folder...", fg="cyan", bold=True)
         click.echo(f"Old folder name        : {old_base}")
         click.echo(f"New pending folder name: {new_base}")
-        if not click.confirm(
-            click.style(
-                "\nWould you like to replace the original folder name?",
-                fg="magenta",
-                bold=True,
-            ),
-            default=True,
-        ):
-            return path
+        if not auto_rename:
+            if not click.confirm(
+                click.style(
+                    "\nWould you like to replace the original folder name?",
+                    fg="magenta",
+                    bold=True,
+                ),
+                default=True,
+            ):
+                return path
 
-        new_base = _edit_folder_interactive(new_base)
+        new_base = _edit_folder_interactive(new_base, auto_rename)
 
     new_path = os.path.join(os.path.dirname(path), new_base)
     if os.path.isdir(new_path) and old_base != new_base:
@@ -120,8 +121,10 @@ def _fix_format(metadata, keys):
     return sub_metadata
 
 
-def _edit_folder_interactive(foldername):
+def _edit_folder_interactive(foldername, auto_rename):
     """Allow the user to edit the pending folder name in a text editor."""
+    if auto_rename:
+        return foldername
     if not click.confirm(
         click.style(
             "Is the new folder name acceptable? ([n] to edit)", fg="magenta", bold=True
