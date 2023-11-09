@@ -120,6 +120,7 @@ def compile_data_new_group(
         "format": metadata["format"],
         "bitrate": metadata["encoding"],
         "other_bitrate": None,
+        "scene": metadata["scene"],
         "vbr": metadata["encoding_vbr"],
         "media": metadata["source"],
         "tags": metadata["tags"],
@@ -144,7 +145,6 @@ def compile_data_existing_group(
 ):
     """Compile the data that needs to be submitted
     with an upload to an existing group."""
-    # print(generate_t_description(metadata, track_data, hybrid, metadata["urls"], spectral_urls, lossy_comment))
     return {
         "submit": True,
         "type": 0,
@@ -156,6 +156,7 @@ def compile_data_existing_group(
         "remaster_catalogue_number": generate_catno(metadata),
         "format": metadata["format"],
         "bitrate": metadata["encoding"],
+        "scene": metadata["scene"],
         "other_bitrate": None,
         "vbr": metadata["encoding_vbr"],
         "media": metadata["source"],

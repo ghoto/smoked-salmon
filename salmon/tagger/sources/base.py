@@ -41,6 +41,7 @@ class MetadataMixin(ABC):
             "tracks": self.parse_tracks(soup),
             "upc": self.parse_upc(soup),
             "comment": self.parse_comment(soup),
+            "scene": False,
             "encoding": None,
             "encoding_vbr": None,
             "media": None,

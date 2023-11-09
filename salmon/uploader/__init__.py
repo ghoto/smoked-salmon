@@ -125,6 +125,11 @@ loop = asyncio.get_event_loop()
     is_flag=True,
     help=f'Skip check for 24 bit upconversion',
 )
+@click.option(
+    "--scene",
+    is_flag=True,
+    help=f'Is this a scene release (default: False)'
+)
 def up(
     path,
     group_id,
@@ -139,6 +144,7 @@ def up(
     spectrals_after,
     auto_rename,
     skip_up,
+    scene
 ):
     """Command to upload an album folder to a Gazelle Site."""
     gazelle_site = salmon.trackers.get_class(tracker)()
@@ -163,6 +169,7 @@ def up(
         lossy,
         spectrals,
         encoding,
+        scene=scene,
         overwrite_meta=overwrite,
         recompress=compress,
         request_id=request,
@@ -180,6 +187,7 @@ def upload(
     lossy,
     spectrals,
     encoding,
+    scene=False,
     existing=None,
     overwrite_meta=False,
     recompress=False,
@@ -204,6 +212,7 @@ def upload(
         audio_info,
         source,
         encoding,
+        scene=scene,
         existing=existing,
         overwrite=overwrite_meta,
         prompt_encoding=True,
@@ -345,14 +354,16 @@ def edit_metadata(path, tags, metadata, source, rls_data, recompress, auto_renam
     """
     while True:
         metadata = review_metadata(metadata, metadata_validator)
-        tag_files(path, tags, metadata, auto_rename)
+        if not metadata['scene']:
+            tag_files(path, tags, metadata, auto_rename)
 
         tags = check_tags(path)
         if recompress:
             recompress_path(path)
         path = rename_folder(path, metadata, auto_rename)
-        rename_files(path, tags, metadata, auto_rename, source)
-        check_folder_structure(path)
+        if not metadata['scene']:
+            rename_files(path, tags, metadata, auto_rename, source)
+            check_folder_structure(path)
 
         if click.confirm(
             click.style(

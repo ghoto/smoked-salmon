@@ -1,6 +1,7 @@
 import os
 import re
 import shutil
+from distutils.dir_util import copy_tree
 from copy import copy
 from string import Formatter
 
@@ -21,9 +22,13 @@ def rename_folder(path, metadata, auto_rename, check=True):
     user. Have them decide whether or not to accept the folder name.
     Then offer them the ability to edit the folder name in a text editor
     before the renaming occurs.
+    For scene releases, the name of the original folder is kept untouched, and
+    the folder is copied to the download folder.
     """
     old_base = os.path.basename(path)
     new_base = generate_folder_name(metadata)
+    if metadata['scene']:
+        new_base = old_base
 
     if check:
         click.secho("\nRenaming folder...", fg="cyan", bold=True)
@@ -59,8 +64,8 @@ def rename_folder(path, metadata, auto_rename, check=True):
     new_path_dirname = os.path.dirname(new_path)
     if not os.path.exists(new_path_dirname):
         os.makedirs(new_path_dirname)
-    os.rename(path, new_path)
-    click.secho(f"Renamed folder to {new_base}.", fg="yellow")
+    copy_tree(path, new_path)
+    click.secho(f"Copied folder to {new_base}.", fg="yellow")
     return new_path
 
 
