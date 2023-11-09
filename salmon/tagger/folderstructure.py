@@ -38,6 +38,7 @@ def _check_path_lengths(path):
     offending_files, really_offending_files = [], []
     root_len = len(config.DOWNLOAD_DIRECTORY) + 1
     for root, _, files in os.walk(path):
+        print(len(os.path.abspath(root)), root_len, os.path.abspath(root))
         if len(os.path.abspath(root)) - root_len > 180:
             click.secho("A subfolder has a path length of >180 characters.", fg="red")
             raise NoncompliantFolderStructure

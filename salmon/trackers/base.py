@@ -289,7 +289,12 @@ class BaseGazelleApi:
                             + self.request_url(resp['response']['requestid']),
                             fg="green",
                         )
-                return resp["response"]["torrentid"]
+                torrent_id = 0
+                if "torrentid" in resp["response"]:
+                    torrent_id = resp["response"]["torrentid"]
+                elif "torrentId" in resp["response"]:
+                    torrent_id = resp["response"]["torrentId"]
+                return torrent_id
         except TypeError:
             raise RequestError(f"API upload failed, response text: {resp.text}")
 

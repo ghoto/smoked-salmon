@@ -22,6 +22,9 @@ class OpsApi(BaseGazelleApi):
             self.dot_torrents_dir = config.DOTTORRENTS_DIR
 
         self.cookie = config.OPS_SESSION
+        if config.OPS_API_KEY:
+            self.api_key = config.OPS_API_KEY
+
         super().__init__()
 
     def parse_most_recent_torrent_and_group_id_from_group_page(self, text):
