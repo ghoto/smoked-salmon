@@ -42,7 +42,8 @@ def rename_folder(path, metadata, auto_rename, check=True):
 
         new_base = _edit_folder_interactive(new_base, auto_rename)
 
-    new_path = os.path.join(os.path.dirname(path), new_base)
+    #new_path = os.path.join(os.path.dirname(path), new_base)
+    new_path = os.path.join(config.DOWNLOAD_DIRECTORY, new_base)
     if os.path.isdir(new_path) and old_base != new_base:
         if not check or click.confirm(
             click.style(
