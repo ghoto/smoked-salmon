@@ -275,7 +275,7 @@ def upload(
 
     if not group_id:
         # This prevents the cover being uploaded more than once for multiple sites.
-        cover_url = upload_cover(path)
+        cover_url = upload_cover(path, scene)
     else:
         cover_url = None
 

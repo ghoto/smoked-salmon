@@ -39,7 +39,7 @@ def prepare_and_upload(
     """Wrapper function for all the data compiling and processing."""
     if not group_id:
         if not cover_url:
-            cover_url = upload_cover(path)
+            cover_url = upload_cover(path, scene=metadata['scene'])
         data = compile_data_new_group(
             path,
             metadata,
@@ -226,7 +226,7 @@ def generate_description(track_data, metadata):
     """Generate the group description with the tracklist and metadata source links."""
     description = "[b][size=4]Tracklist[/b]\n"
     multi_disc = any(
-        t["t"].discnumber and int(t["t"].discnumber) > 1 for t in track_data.values()
+        t["t"].discnumber and (t["t"].discnumber.startswith('1/') or int(t["t"].discnumber) > 1) for t in track_data.values()
     )
     total_duration = 0
     for track in track_data.values():
