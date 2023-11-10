@@ -61,6 +61,8 @@ def prepare_and_upload(
             lossy_comment,
             request_id,
         )
+    if not data['scene']:
+        del data['scene']
     torrent_path, torrent_file = generate_torrent(gazelle_site, path)
     files = compile_files(path, torrent_file, metadata)
 
