@@ -29,6 +29,7 @@ def rename_folder(path, metadata, auto_rename, check=True):
     new_base = generate_folder_name(metadata)
     if metadata['scene']:
         new_base = old_base
+        auto_rename = True
 
     if check:
         click.secho("\nRenaming folder...", fg="cyan", bold=True)
