@@ -51,6 +51,9 @@ from salmon.uploader.upload import (
     generate_lossy_approval_comment,
     prepare_and_upload,
 )
+from salmon.rutorrent.rutorrent import (
+    add_torrent_to_rutorrent
+)
 from salmon.checks.upconverts import upload_upconvert_test
 
 loop = asyncio.get_event_loop()
@@ -130,6 +133,11 @@ loop = asyncio.get_event_loop()
     is_flag=True,
     help=f'Is this a scene release (default: False)'
 )
+@click.option(
+    "--rutorrent",
+    is_flag=True,
+    help=f'Adds torrent to Rutorrent tracker after torrent upload (default: False)'
+)
 def up(
     path,
     group_id,
@@ -144,7 +152,8 @@ def up(
     spectrals_after,
     auto_rename,
     skip_up,
-    scene
+    scene,
+    rutorrent
 ):
     """Command to upload an album folder to a Gazelle Site."""
     gazelle_site = salmon.trackers.get_class(tracker)()
@@ -170,6 +179,7 @@ def up(
         spectrals,
         encoding,
         scene=scene,
+        rutorrent=rutorrent,
         overwrite_meta=overwrite,
         recompress=compress,
         request_id=request,
@@ -188,6 +198,7 @@ def upload(
     spectrals,
     encoding,
     scene=False,
+    rutorrent=False,
     existing=None,
     overwrite_meta=False,
     recompress=False,
@@ -308,7 +319,7 @@ def upload(
         if not request_id and config.CHECK_REQUESTS:
             request_id = check_requests(gazelle_site, searchstrs)
 
-        torrent_id = prepare_and_upload(
+        torrent_id, torrent_path, torrent_file = prepare_and_upload(
             gazelle_site,
             path,
             group_id,
@@ -338,6 +349,13 @@ def upload(
             fg="green",
             bold=True,
         )
+        if rutorrent:
+            click.secho(
+            f"\nAdding torrent to rutracker {config.RUTORRENT_URL} {config.TRACKER_DIRS[tracker]} {config.TRACKER_LABELS[tracker]}",
+            fg="green",
+            bold=True
+            )
+            add_torrent_to_rutorrent(config.RUTORRENT_URL, torrent_path, config.TRACKER_DIRS[tracker], config.TRACKER_LABELS[tracker])
         if config.COPY_UPLOADED_URL_TO_CLIPBOARD:
             pyperclip.copy(url)
         tracker = None

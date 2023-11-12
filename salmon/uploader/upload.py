@@ -1,8 +1,6 @@
 import asyncio
 import os
 import re
-#import shutil
-#import tempfile
 
 import click
 from dottorrent import Torrent
@@ -69,14 +67,7 @@ def prepare_and_upload(
     click.secho(f"Uploading torrent...", fg="yellow")
     try:
         torrent_id = loop.run_until_complete(gazelle_site.upload(data, files))
-#        shutil.move(
-#            torrent_path,
-#            os.path.join(
-#                gazelle_site.dot_torrents_dir,
-#                f"{os.path.basename(path)} - {gazelle_site.site_string}.torrent",
-#            ),
-#        )
-        return torrent_id
+        return torrent_id, torrent_path, torrent_file
     except RequestError as e:
         click.secho(str(e), fg="red", bold=True)
         exit()
