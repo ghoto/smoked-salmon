@@ -55,6 +55,7 @@ from salmon.rutorrent.rutorrent import (
     add_torrent_to_rutorrent
 )
 from salmon.checks.upconverts import upload_upconvert_test
+from salmon.checks.integrity import (check_integrity, sanitize_integrity)
 
 loop = asyncio.get_event_loop()
 
@@ -382,6 +383,21 @@ def edit_metadata(path, tags, metadata, source, rls_data, recompress, auto_renam
         if not metadata['scene']:
             rename_files(path, tags, metadata, auto_rename, source)
             check_folder_structure(path)
+
+        if click.confirm(
+            click.style(
+                "Do you want to check for integrity of this upload?",
+                fg="magenta"),
+            default=True,
+            ):
+            (integrity, integrity_output) = check_integrity(path)
+            if not integrity and click.confirm(
+                click.style(
+                    "Do you want to sanitize this upload?",
+                    fg="magenta"),
+                default=False,
+                ):
+                sanitize_integrity(path)
 
         if click.confirm(
             click.style(
