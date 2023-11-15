@@ -33,6 +33,7 @@ def prepare_and_upload(
     spectral_urls,
     lossy_comment,
     request_id,
+    source_url
 ):
     """Wrapper function for all the data compiling and processing."""
     if not group_id:
@@ -47,6 +48,7 @@ def prepare_and_upload(
             spectral_urls,
             lossy_comment,
             request_id,
+            source_url=source_url
         )
     else:
         data = compile_data_existing_group(
@@ -58,6 +60,7 @@ def prepare_and_upload(
             spectral_urls,
             lossy_comment,
             request_id,
+            source_url=source_url
         )
     if not data['scene']:
         del data['scene']
@@ -90,6 +93,7 @@ def compile_data_new_group(
     spectral_urls,
     lossy_comment,
     request_id=None,
+    source_url=None
 ):
     """
     Compile the data dictionary that needs to be submitted with a brand new
@@ -120,7 +124,7 @@ def compile_data_new_group(
         "image": cover_url,
         "album_desc": generate_description(track_data, metadata),
         "release_desc": generate_t_description(
-            metadata, track_data, hybrid, metadata["urls"], spectral_urls, lossy_comment
+            metadata, track_data, hybrid, metadata["urls"], spectral_urls, lossy_comment, source_url
         ),
         'requestid': request_id,
     }
@@ -135,6 +139,7 @@ def compile_data_existing_group(
     spectral_urls,
     lossy_comment,
     request_id,
+    source_url=None
 ):
     """Compile the data that needs to be submitted
     with an upload to an existing group."""
@@ -154,7 +159,7 @@ def compile_data_existing_group(
         "vbr": metadata["encoding_vbr"],
         "media": metadata["source"],
         "release_desc": generate_t_description(
-            metadata, track_data, hybrid, metadata["urls"], spectral_urls, lossy_comment
+            metadata, track_data, hybrid, metadata["urls"], spectral_urls, lossy_comment, source_url
         ),
         'requestid': request_id,
     }
@@ -254,7 +259,7 @@ def generate_description(track_data, metadata):
 
 
 def generate_t_description(
-    metadata, track_data, hybrid, metadata_urls, spectral_urls, lossy_comment
+    metadata, track_data, hybrid, metadata_urls, spectral_urls, lossy_comment, source_url
 ):
     """
     Generate the torrent description. Add information about each file, and
@@ -297,6 +302,9 @@ def generate_t_description(
 
     if lossy_comment and config.LMA_COMMENT_IN_T_DESC:
         description += f"[u]Lossy Notes:[/u]\n{lossy_comment}\n\n"
+
+    if source_url is not None:
+        description += f"[b]Source:[/b]\n[url]{source_url}[/url]\n\n"
 
     if metadata_urls:
         description += "[b]More info:[/b] " + generate_source_links(metadata_urls)

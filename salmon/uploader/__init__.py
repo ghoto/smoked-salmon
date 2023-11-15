@@ -139,6 +139,10 @@ loop = asyncio.get_event_loop()
     is_flag=True,
     help=f'Adds torrent to Rutorrent tracker after torrent upload (default: False)'
 )
+@click.option("--source-url", "-su", 
+    default=None, 
+    help=f'For WEB uploads provide the source of the album to be added in release description'
+)
 def up(
     path,
     group_id,
@@ -154,7 +158,8 @@ def up(
     auto_rename,
     skip_up,
     scene,
-    rutorrent
+    rutorrent,
+    source_url
 ):
     """Command to upload an album folder to a Gazelle Site."""
     gazelle_site = salmon.trackers.get_class(tracker)()
@@ -179,6 +184,7 @@ def up(
         lossy,
         spectrals,
         encoding,
+        source_url=source_url,
         scene=scene,
         rutorrent=rutorrent,
         overwrite_meta=overwrite,
@@ -332,6 +338,7 @@ def upload(
             spectral_urls,
             lossy_comment,
             request_id,
+            source_url
         )
         if lossy_master:
             report_lossy_master(
@@ -395,7 +402,7 @@ def edit_metadata(path, tags, metadata, source, rls_data, recompress, auto_renam
                 click.style(
                     "Do you want to sanitize this upload?",
                     fg="magenta"),
-                default=False,
+                default=True,
                 ):
                 sanitize_integrity(path)
 
