@@ -143,6 +143,11 @@ loop = asyncio.get_event_loop()
     default=None, 
     help=f'For WEB uploads provide the source of the album to be added in release description'
 )
+@click.option(
+    "-yyy",
+    is_flag=True,
+    help=f'Automatically pick the default answer for prompt'
+)
 def up(
     path,
     group_id,
@@ -159,9 +164,12 @@ def up(
     skip_up,
     scene,
     rutorrent,
-    source_url
+    source_url,
+    yyy
 ):
     """Command to upload an album folder to a Gazelle Site."""
+    if yyy:
+        config.YES_ALL = True
     gazelle_site = salmon.trackers.get_class(tracker)()
     if request:
         request = salmon.trackers.validate_request(gazelle_site, request)
@@ -237,7 +245,7 @@ def upload(
     )
 
     try:
-        if rls_data["encoding"] == "24bit Lossless" and not skip_up and click.confirm(
+        if rls_data["encoding"] == "24bit Lossless" and not skip_up and True if config.YES_ALL else click.confirm(
             click.style(
                 "24bit detected. Do you want to check whether might be upconverted?",
                 fg="magenta",
@@ -392,13 +400,13 @@ def edit_metadata(path, tags, metadata, source, rls_data, recompress, auto_renam
             check_folder_structure(path)
 
         if click.confirm(
-            click.style(
+            True if config.YES_ALL else click.style(
                 "Do you want to check for integrity of this upload?",
                 fg="magenta"),
             default=True,
             ):
             (integrity, integrity_output) = check_integrity(path)
-            if not integrity and click.confirm(
+            if not integrity and True if config.YES_ALL else click.confirm(
                 click.style(
                     "Do you want to sanitize this upload?",
                     fg="magenta"),
@@ -407,7 +415,7 @@ def edit_metadata(path, tags, metadata, source, rls_data, recompress, auto_renam
                 sanitize_integrity(path)
 
         if click.confirm(
-            click.style(
+            True if config.YES_ALL else click.style(
                 "\nWould you like to upload the torrent? (No to re-run metadata "
                 "section)",
                 fg="magenta",

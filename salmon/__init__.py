@@ -36,7 +36,7 @@ DEFAULT_VALUES = {
     "NATIVE_SPECTRALS_VIEWER": False,
     "PROMPT_PUDDLETAG": False,
     "ADD_EDITION_TITLE_TO_ALBUM_TAG": True,
-    "WEB_HOST": "http://127.0.0.1:55110",
+    "WEB_HOST": "127.0.0.1",
     "WEB_PORT": 55110,
     "WEB_STATIC_ROOT_URL": "/static",
     "COMPRESS_SPECTRALS": False,
@@ -52,6 +52,7 @@ DEFAULT_VALUES = {
     "LAST_MINUTE_DUPE_CHECK": False,
     "RED_DOTTORRENTS_DIR": False,
     "OPS_DOTTORRENTS_DIR": False,
+    "YES_ALL": False,
 }
 
 

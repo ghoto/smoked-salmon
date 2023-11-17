@@ -344,15 +344,16 @@ def upload_spectrals(spectrals_path, spectral_ids):
 def prompt_spectrals(spectral_ids, lossy_master, check_lma):
     """Ask which spectral IDs the user wants to upload."""
     while True:
-        ids = click.prompt(
+        ids = "*" if config.YES_ALL else click.prompt(
             click.style(
                 f"What spectral IDs would you like to upload to "
                 f"{config.SPECS_UPLOADER}? (\" * \" for all)",
                 fg="magenta",
                 bold=True,
             ),
-            default="",
+            default="*",
         )
+        print(ids)
         if ids.strip() == "*":
             return spectral_ids
         ids = [i.strip() for i in ids.split()]
@@ -374,7 +375,7 @@ def prompt_spectrals(spectral_ids, lossy_master, check_lma):
 def prompt_lossy_master():
     while True:
         flush_stdin()
-        r = click.prompt(
+        r = "n" if config.YES_ALL else click.prompt(
             click.style(
                 "\nIs this release lossy mastered? [y]es, [N]o, [r]eopen spectrals, "
                 "[a]bort, [d]elete folder",
@@ -382,7 +383,7 @@ def prompt_lossy_master():
                 bold=True,
             ),
             type=click.STRING,
-            default="N",
+            default="n",
         )[0].lower()
         if r == "y":
             return True
@@ -421,7 +422,7 @@ def report_lossy_master(
 
 
 def generate_lossy_approval_comment(source_url, filenames):
-    comment = click.prompt(
+    comment = "" if config.YES_ALL else click.prompt(
         click.style(
             "Do you have a comment for the lossy approval report? It is appropriate to "
             "make a note about the source here. Source information from go, gos, and the "
