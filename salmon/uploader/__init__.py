@@ -184,6 +184,8 @@ def up(
         encoding,
         spectrals_after,
     )
+    if source_url:
+        source_url = source_url.strip()
     upload(
         gazelle_site,
         path,
@@ -399,8 +401,8 @@ def edit_metadata(path, tags, metadata, source, rls_data, recompress, auto_renam
             rename_files(path, tags, metadata, auto_rename, source)
             check_folder_structure(path)
 
-        if click.confirm(
-            True if config.YES_ALL else click.style(
+        if config.YES_ALL or click.confirm(
+            click.style(
                 "Do you want to check for integrity of this upload?",
                 fg="magenta"),
             default=True,
@@ -414,8 +416,8 @@ def edit_metadata(path, tags, metadata, source, rls_data, recompress, auto_renam
                 ):
                 sanitize_integrity(path)
 
-        if click.confirm(
-            True if config.YES_ALL else click.style(
+        if config.YES_ALL or click.confirm(
+            click.style(
                 "\nWould you like to upload the torrent? (No to re-run metadata "
                 "section)",
                 fg="magenta",
