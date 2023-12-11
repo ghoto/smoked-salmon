@@ -247,14 +247,16 @@ def upload(
     )
 
     try:
-        if rls_data["encoding"] == "24bit Lossless" and not skip_up and True if config.YES_ALL else click.confirm(
-            click.style(
-                "24bit detected. Do you want to check whether might be upconverted?",
-                fg="magenta",
-            ),
-            default=True,
-        ):
-            upload_upconvert_test(path)
+        if rls_data["encoding"] == "24bit Lossless" and not skip_up:
+            if not config.YES_ALL:
+                if click.confirm(
+                        click.style(
+                            "24bit detected. Do you want to check whether might be upconverted?",
+                            fg="magenta",),
+                        default=True,):
+                    upload_upconvert_test(path)
+            else:
+                upload_upconvert_test(path)
 
         if group_id is None:
             searchstrs = generate_dupe_check_searchstrs(
