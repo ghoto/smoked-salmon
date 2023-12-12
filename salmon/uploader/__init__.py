@@ -371,7 +371,7 @@ def upload(
         )
         if rutorrent:
             click.secho(
-            f"\nAdding torrent to rutracker {config.RUTORRENT_URL} {config.TRACKER_DIRS[tracker]} {config.TRACKER_LABELS[tracker]}",
+            f"\nAdding torrent to client {config.RUTORRENT_URL} {config.TRACKER_DIRS[tracker]} {config.TRACKER_LABELS[tracker]}",
             fg="green",
             bold=True
             )

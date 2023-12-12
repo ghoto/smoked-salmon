@@ -353,7 +353,6 @@ def prompt_spectrals(spectral_ids, lossy_master, check_lma):
             ),
             default="*",
         )
-        print(ids)
         if ids.strip() == "*":
             return spectral_ids
         ids = [i.strip() for i in ids.split()]
