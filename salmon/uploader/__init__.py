@@ -264,13 +264,14 @@ def upload(
             )
             group_id = check_existing_group(gazelle_site, searchstrs)
 
-        if spectrals_after:
-            lossy_master = False
-            # We tell the uploader not to worry about it being lossy until later.
-        else:
-            lossy_master, spectral_ids = check_spectrals(
-                path, audio_info, lossy, spectrals
-            )
+        if rls_data['format'] != "MP3":
+            if spectrals_after:
+                lossy_master = False
+                # We tell the uploader not to worry about it being lossy until later.
+            else:
+                lossy_master, spectral_ids = check_spectrals(
+                    path, audio_info, lossy, spectrals
+                )
         metadata = get_metadata(path, tags, rls_data)
         download_cover_if_nonexistent(path, metadata["cover"])
         path, metadata, tags, audio_info = edit_metadata(
@@ -287,19 +288,20 @@ def upload(
         return click.secho("\nDeleted folder, aborting upload...", fg="red")
 
     lossy_comment = None
-    if spectrals_after:
-        spectral_urls = None
-    else:
-        if lossy_master:
-            lossy_comment = generate_lossy_approval_comment(
-                source_url, list(track_data.keys())
-            )
-            click.echo()
+    if rls_data['format'] != "MP3":
+        if spectrals_after:
+            spectral_urls = None
+        else:
+            if lossy_master:
+                lossy_comment = generate_lossy_approval_comment(
+                    source_url, list(track_data.keys())
+                )
+                click.echo()
 
-        spectrals_path = os.path.join(path, "Spectrals")
-        spectral_urls = handle_spectrals_upload_and_deletion(
-            spectrals_path, spectral_ids
-        )
+            spectrals_path = os.path.join(path, "Spectrals")
+            spectral_urls = handle_spectrals_upload_and_deletion(
+                spectrals_path, spectral_ids
+            )
     if config.LAST_MINUTE_DUPE_CHECK:
         last_min_dupe_check(gazelle_site, searchstrs)
 
@@ -316,13 +318,14 @@ def upload(
     while True:
         # Loop until we don't want to upload to any more sites.
         if not tracker:
-            if spectrals_after and torrent_id:
-                # Here we are checking the spectrals after uploading to the first site
-                # if they were not done before.
-                lossy_master, lossy_comment, spectral_urls = post_upload_spectral_check(
-                    gazelle_site, path, torrent_id, None, track_data, source, source_url
-                )
-                spectrals_after = False
+            if rls_data['format'] != "MP3":
+                if spectrals_after and torrent_id:
+                    # Here we are checking the spectrals after uploading to the first site
+                    # if they were not done before.
+                    lossy_master, lossy_comment, spectral_urls = post_upload_spectral_check(
+                        gazelle_site, path, torrent_id, None, track_data, source, source_url
+                    )
+                    spectrals_after = False
             click.secho(
                 "Would you like to upload to another tracker? ", fg="magenta", nl=False
             )
