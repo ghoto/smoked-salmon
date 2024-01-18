@@ -5,6 +5,7 @@ import shutil
 
 import click
 import pyperclip
+from yaml import safe_load
 
 from salmon import config
 from salmon.common import commandgroup
@@ -51,8 +52,9 @@ from salmon.uploader.upload import (
     concat_track_data,
     prepare_and_upload,
 )
-from salmon.rutorrent.rutorrent import (
-    add_torrent_to_rutorrent
+from salmon.seeding.clients import (
+    add_torrent_to_rutorrent,
+    add_torrent_to_transmission
 )
 from salmon.checks.upconverts import upload_upconvert_test
 from salmon.checks.integrity import (check_integrity, sanitize_integrity)
@@ -135,9 +137,9 @@ loop = asyncio.get_event_loop()
     help=f'Is this a scene release (default: False)'
 )
 @click.option(
-    "--rutorrent",
+    "--seeding",
     is_flag=True,
-    help=f'Adds torrent to Rutorrent tracker after torrent upload (default: False)'
+    help=f'Adds torrent to BitTorrent client after torrent for seeding (default: False)'
 )
 @click.option("--source-url", "-su", 
     default=None, 
@@ -163,7 +165,7 @@ def up(
     auto_rename,
     skip_up,
     scene,
-    rutorrent,
+    seeding,
     source_url,
     yyy
 ):
@@ -196,7 +198,7 @@ def up(
         encoding,
         source_url=source_url,
         scene=scene,
-        rutorrent=rutorrent,
+        seeding=seeding,
         overwrite_meta=overwrite,
         recompress=compress,
         request_id=request,
@@ -215,7 +217,7 @@ def upload(
     spectrals,
     encoding,
     scene=False,
-    rutorrent=False,
+    seeding=False,
     existing=None,
     overwrite_meta=False,
     recompress=False,
@@ -371,13 +373,31 @@ def upload(
             fg="green",
             bold=True,
         )
-        if rutorrent:
-            click.secho(
-            f"\nAdding torrent to client {config.RUTORRENT_URL} {config.TRACKER_DIRS[tracker]} {config.TRACKER_LABELS[tracker]}",
-            fg="green",
-            bold=True
-            )
-            add_torrent_to_rutorrent(config.RUTORRENT_URL, torrent_path, config.TRACKER_DIRS[tracker], config.TRACKER_LABELS[tracker])
+        if seeding:
+            with open(os.path.join(os.path.expanduser("~"), '.seeding.conf.yaml'), 'r') as seeding_fh:
+                seeding_conf_all = safe_load(seeding_fh)
+                seeding_conf = {}
+                if tracker in seeding_conf_all:
+                    seeding_conf = seeding_conf_all[tracker]
+                elif 'default' in seeding_conf_all:
+                    seeding_conf = seeding_conf_all['default']
+                if seeding_conf['type']:
+                    if seeding_conf['type'] == 'transmission':
+                        click.secho(
+                            f"\nAdding torrent to client {seeding_conf['host']}:{seeding_conf['port']} {seeding_conf['directory']}",
+                            fg="green",
+                            bold=True)
+                        add_torrent_to_transmission(torrent_path, seeding_conf['host'], seeding_host['port'], seeding_host['directory'], seeding_host['username'], seeding_host['password'])
+                    elif seeding_conf['type'] == 'rutorrent':
+                        click.secho(
+                            f"\nAdding torrent to client {seeding_conf['url']} {seeding_conf['directory']} {seeding_conf['label']}",
+                            fg="green",
+                            bold=True)
+                        add_torrent_to_rutorrent(seeding_conf['url'], torrent_path, seeding_conf['directory'], seeding_config['label'])
+                    else:
+                        "no seeding"
+                else:
+                    "no seeding"
         if config.COPY_UPLOADED_URL_TO_CLIPBOARD:
             pyperclip.copy(url)
         tracker = None

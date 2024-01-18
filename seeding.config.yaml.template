@@ -1,0 +1,22 @@
+trackers:
+  OPS:
+    type: transmission
+    host: 192.168.1.11
+    port: 9091
+    directory: /downloads/music
+    user:
+    password:
+
+  RED:
+    type: transmission
+    host: 192.168.1.11
+    port: 9091
+    directory: /downloads/music
+    user:
+    password:
+
+  default:
+    type: rutorrent
+    url: http://192.168.11.12:9380/plugins/rpc/rpc.php
+    label: music-default
+    directory: /downloads/rutorrent
