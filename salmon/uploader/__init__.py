@@ -387,13 +387,13 @@ def upload(
                             f"\nAdding torrent to client {seeding_conf['host']}:{seeding_conf['port']} {seeding_conf['directory']}",
                             fg="green",
                             bold=True)
-                        add_torrent_to_transmission(torrent_path, seeding_conf['host'], seeding_conf['port'], seeding_conf['directory'], seeding_conf['username'], seeding_conf['password'])
+                        add_torrent_to_transmission(torrent_path, seeding_conf['host'], seeding_conf['port'], seeding_conf['directory'], seeding_conf.get('username'), seeding_conf.get('password'))
                     elif seeding_conf['type'] == 'rutorrent':
                         click.secho(
                             f"\nAdding torrent to client {seeding_conf['url']} {seeding_conf['directory']} {seeding_conf['label']}",
                             fg="green",
                             bold=True)
-                        add_torrent_to_rutorrent(seeding_conf['url'], torrent_path, seeding_conf['directory'], seeding_conf['label'])
+                        add_torrent_to_rutorrent(seeding_conf['url'], torrent_path, seeding_conf['directory'], seeding_conf.get('label'))
                     else:
                         "no seeding"
                 else:
