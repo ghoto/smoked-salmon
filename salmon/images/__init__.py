@@ -10,7 +10,7 @@ from salmon import config
 from salmon.common import AliasedCommands, commandgroup
 from salmon.database import DB_PATH
 from salmon.errors import ImageUploadFailed
-from salmon.images import catbox, emp, imgur, ptpimg
+from salmon.images import catbox, emp, imgur, ptpimg, ra
 
 loop = asyncio.get_event_loop()
 
@@ -19,6 +19,7 @@ HOSTS = {
     "imgur": imgur,
     "emp": emp,
     "catbox": catbox,
+    "ra":ra,
 }
 
 
