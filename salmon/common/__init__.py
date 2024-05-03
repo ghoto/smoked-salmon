@@ -28,8 +28,9 @@ from salmon.common.strings import (  # noqa: F401
 )
 from salmon.errors import ScrapeError
 
+ if 'win32' in sys.platform:
+     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 loop = asyncio.get_event_loop()
-
 
 @click.group(
     context_settings=dict(help_option_names=["-h", "--help"]), cls=AliasedCommands
