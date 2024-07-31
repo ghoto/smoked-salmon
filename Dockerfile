@@ -22,7 +22,7 @@ COPY ./ /salmon
 
 RUN apt-get update \
     && echo "----- Installing dependencies" \
-    && apt-get install -y gcc sox flac mp3val vim ffmpeg \
+    && apt-get install -y gcc sox flac mp3val vim ffmpeg libsox-fmt-mp3 \
     && echo "----- Installing python requirements" \
     && pip install --trusted-host pypi.python.org -r requirements.txt \
     && echo "----- Initializing salmon" \
