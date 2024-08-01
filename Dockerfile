@@ -27,7 +27,7 @@ RUN apt-get update \
     && pip install --trusted-host pypi.python.org -r requirements.txt \
     && echo "----- Initializing salmon" \
     # If `WEB_HOST` exists in config.py.txt, leave it alone. Otherwise append `WEB_HOST = '0.0.0.0'`
-    && grep -q "WEB_HOST" config.py.txt || echo "\nWEB_HOST = '0.0.0.0'" >> config.py.txt \
+    && grep -q "WEB_HOST" config.py.txt || echo "\nWEB_HOST = '0.0.0.0'" >> config.py.txt lame \
     && cp config.py.txt config.py \
     && python run.py migrate \
     && echo "----- Adding salmon user and group and chown" \
